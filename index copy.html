@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>CRM Visual de Vendas</title>
+    <link rel="stylesheet" href="/static/style.css" />
+</head>
+<body>
+    <div class="app-shell">
+        <header class="topbar">
+            <div>
+                <h1>CRM Visual de Vendas</h1>
+                <p>Pipeline, atividades e controle de follow-ups.</p>
+            </div>
+            <button id="open-new-opportunity">+ Nova oportunidade</button>
+        </header>
+
+        <section class="dashboard">
+            <div class="metric">
+                <strong id="metric-total">0</strong>
+                <span>Total de oportunidades</span>
+            </div>
+            <div class="metric warning">
+                <strong id="metric-overdue">0</strong>
+                <span>Atrasadas</span>
+            </div>
+            <div class="metric">
+                <strong id="metric-no-activity">0</strong>
+                <span>Sem atividade</span>
+            </div>
+            <div class="metric success">
+                <strong id="metric-conversion">0%</strong>
+                <span>Taxa de conversão</span>
+            </div>
+        </section>
+
+        <section class="controls">
+            <div>
+                <label>Buscar:</label>
+                <input id="search-input" placeholder="Cliente, proposta ou e-mail" />
+            </div>
+            <div>
+                <label>Filtrar etapa:</label>
+                <select id="filter-stage">
+                    <option value="">Todas</option>
+                    {% for stage in stages %}
+                    <option value="{{ stage }}">{{ stage }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+        </section>
+
+        <main class="main-grid">
+            <section class="pipeline" id="pipeline">
+                {% for stage in stages %}
+                <div class="column" data-stage="{{ stage }}">
+                    <div class="column-header">
+                        <h2>{{ stage }}</h2>
+                    </div>
+                    <div class="column-body" data-stage="{{ stage }}"></div>
+                </div>
+                {% endfor %}
+            </section>
+
+            <aside class="sidebar">
+                <div class="panel">
+                    <h3>Lista de tarefas</h3>
+                    <div>
+                        <strong>Hoje</strong>
+                        <ul id="tasks-today"></ul>
+                    </div>
+                    <div>
+                        <strong>Atrasadas</strong>
+                        <ul id="tasks-overdue"></ul>
+                    </div>
+                    <div>
+                        <strong>Próximas</strong>
+                        <ul id="tasks-next"></ul>
+                    </div>
+                </div>
+                <div class="panel">
+                    <h3>Histórico rápido</h3>
+                    <p>Selecione um card para ver as interações no console ou adicionar atividades futuras.</p>
+                </div>
+            </aside>
+        </main>
+    </div>
+
+    <div class="modal" id="modal-new-opportunity" aria-hidden="true">
+        <div class="modal-content">
+            <button class="close-button" id="close-modal">×</button>
+            <h2>Nova oportunidade</h2>
+            <form id="opportunity-form">
+                <label>Cliente</label>
+                <input name="client_name" required />
+                <label>E-mail</label>
+                <input name="email" type="email" required />
+                <label>Oportunidade</label>
+                <input name="title" required />
+                <label>Valor estimado</label>
+                <input name="amount" type="number" step="0.01" required />
+                <label>Próxima ação</label>
+                <input name="next_action" placeholder="Ex: ligar, enviar proposta" />
+                <label>Data limite de próxima ação</label>
+                <input name="sla_date" type="date" />
+                <label>Stage</label>
+                <select name="stage">
+                    {% for stage in stages %}
+                    <option value="{{ stage }}">{{ stage }}</option>
+                    {% endfor %}
+                </select>
+                <button type="submit" class="primary-button">Salvar oportunidade</button>
+            </form>
+        </div>
+    </div>
+
+    <script src="/static/main.js"></script>
+</body>
+</html>
